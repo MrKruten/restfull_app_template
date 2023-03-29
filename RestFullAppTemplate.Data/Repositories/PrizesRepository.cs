@@ -9,10 +9,6 @@ namespace RestFullAppTemplate.Data.Repositories
 {
     public class PrizesRepository : BaseSqlRepository, IPrizesRepository
     {
-        public PrizesRepository(ApplicationDbContext db) : base(db)
-        {
-        }
-
         public async Task<Prize> Create(Prize prize)
         {
             await using var db = DB;

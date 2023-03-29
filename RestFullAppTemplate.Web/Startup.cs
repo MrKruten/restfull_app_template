@@ -1,7 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using RestFullAppTemplate.Data;
-using RestFullAppTemplate.Data.Context;
-using RestFullAppTemplate.Data.Repositories;
 
 namespace RestFullAppTemplate.Web
 {
@@ -19,11 +16,6 @@ namespace RestFullAppTemplate.Web
             ConfigureDependencyInjection(services);
 
             services.RegisterMapsterConfiguration();
-
-            services.AddDbContext<ApplicationDbContext>((option) =>
-            {
-                option.UseNpgsql(_configuration.GetConnectionString("DefaultSQLConnection"));
-            });
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();

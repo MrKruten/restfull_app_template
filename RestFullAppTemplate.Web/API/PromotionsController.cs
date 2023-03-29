@@ -31,10 +31,10 @@ namespace RestFullAppTemplate.Web.Controllers
                 return BadRequest(promotionDto);
             }
             var promotion = await _promotionsService.Create(promotionDto.Name, promotionDto.Description);
-            return CreatedAtRoute("GetPromo", new { id = promotion.Id }, promotion.Id);
+            return CreatedAtRoute("GetPromo", new { id = promotion.Id });
         }
 
-        [HttpPost("{id:int}")]
+        [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPromo(int id)

@@ -9,10 +9,6 @@ namespace RestFullAppTemplate.Data.Repositories
 {
     public class PromotionsRepository : BaseSqlRepository, IPromotionsRepository
     {
-        public PromotionsRepository(ApplicationDbContext db) : base(db)
-        {
-        }
-
         public async Task<Promo> Create(Promo promo)
         {
             await using var db = DB;

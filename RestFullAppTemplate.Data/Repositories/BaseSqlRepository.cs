@@ -1,14 +1,14 @@
-﻿using RestFullAppTemplate.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using RestFullAppTemplate.Data.Context;
 
 namespace RestFullAppTemplate.Data.Repositories
 {
     public abstract class BaseSqlRepository
     {
-        protected ApplicationDbContext DB;
-
-        protected BaseSqlRepository(ApplicationDbContext db)
-        {
-            DB = db;
-        }
+        private static readonly DbContextOptions<ApplicationDbContext> _options = new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql("Host=localhost;Port=5432;Database=templateDb;Username=postgres;Password=admin").Options;
+        /// <summary>
+        /// make call through: "using var db = DB"
+        /// </summary>
+        protected ApplicationDbContext DB => new(_options);
     }
 }

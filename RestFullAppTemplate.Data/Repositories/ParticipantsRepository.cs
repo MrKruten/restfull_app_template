@@ -9,9 +9,6 @@ namespace RestFullAppTemplate.Data.Repositories
 {
     public class ParticipantsRepository : BaseSqlRepository, IParticipantsRepository
     {
-        public ParticipantsRepository(ApplicationDbContext db) : base(db)
-        {
-        }
 
         public async Task<Participant> Create(Participant participant)
         {
