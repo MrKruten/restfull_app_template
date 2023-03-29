@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RestFullAppTemplate.Data;
 using RestFullAppTemplate.Data.Context;
+using RestFullAppTemplate.Data.Repositories;
 
 namespace RestFullAppTemplate.Web
 {
@@ -21,9 +22,7 @@ namespace RestFullAppTemplate.Web
 
             services.AddDbContext<ApplicationDbContext>((option) =>
             {
-                option.UseNpgsql(_configuration.GetConnectionString("DefaultSQLConnection"),
-                    assembly =>
-                        assembly.MigrationsAssembly("RestFullAppTemplate.Data"));
+                option.UseNpgsql(_configuration.GetConnectionString("DefaultSQLConnection"));
             });
             services.AddControllers();
             services.AddEndpointsApiExplorer();
@@ -53,7 +52,7 @@ namespace RestFullAppTemplate.Web
                 services.AddSingleton(type.Key, type.Value);
             }
 
-            var srv = RestFullAppTemplate.Services.ContainerRegistration.GetInterfaceBindings();
+            var srv = Services.ContainerRegistration.GetInterfaceBindings();
             foreach (var type in srv)
             {
                 services.AddSingleton(type.Key, type.Value);
