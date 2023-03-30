@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using RestFullAppTemplate.Data;
+using RestFullAppTemplate.Data.Context;
 
 namespace RestFullAppTemplate.Web
 {
@@ -13,8 +15,11 @@ namespace RestFullAppTemplate.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(
+                    "Host=localhost;Port=5432;Database=templateDb;Username=postgres;Password=admin"));
             ConfigureDependencyInjection(services);
-
+            
             services.RegisterMapsterConfiguration();
             services.AddControllers();
             services.AddEndpointsApiExplorer();
@@ -41,13 +46,13 @@ namespace RestFullAppTemplate.Web
             var repo = Data.ContainerRegistration.GetInterfaceBindings();
             foreach (var type in repo)
             {
-                services.AddSingleton(type.Key, type.Value);
+                services.AddTransient(type.Key, type.Value);
             }
 
             var srv = Services.ContainerRegistration.GetInterfaceBindings();
             foreach (var type in srv)
             {
-                services.AddSingleton(type.Key, type.Value);
+                services.AddTransient(type.Key, type.Value);
             }
         }
     }

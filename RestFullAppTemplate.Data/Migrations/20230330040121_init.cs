@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RestFullAppTemplate.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,14 +32,14 @@ namespace RestFullAppTemplate.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    EPromoId = table.Column<int>(type: "integer", nullable: false)
+                    PromoId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Participants", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Participants_Promotions_EPromoId",
-                        column: x => x.EPromoId,
+                        name: "FK_Participants_Promotions_PromoId",
+                        column: x => x.PromoId,
                         principalTable: "Promotions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -52,14 +52,14 @@ namespace RestFullAppTemplate.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    EPromoId = table.Column<int>(type: "integer", nullable: false)
+                    PromoId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Prizes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Prizes_Promotions_EPromoId",
-                        column: x => x.EPromoId,
+                        name: "FK_Prizes_Promotions_PromoId",
+                        column: x => x.PromoId,
                         principalTable: "Promotions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -71,8 +71,7 @@ namespace RestFullAppTemplate.Data.Migrations
                 {
                     ParticipantId = table.Column<int>(type: "integer", nullable: false),
                     PrizeId = table.Column<int>(type: "integer", nullable: false),
-                    EPrizeId = table.Column<int>(type: "integer", nullable: true),
-                    EPromoId = table.Column<int>(type: "integer", nullable: true)
+                    PromoId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -84,36 +83,38 @@ namespace RestFullAppTemplate.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PromoResults_Prizes_EPrizeId",
-                        column: x => x.EPrizeId,
+                        name: "FK_PromoResults_Prizes_PrizeId",
+                        column: x => x.PrizeId,
                         principalTable: "Prizes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PromoResults_Promotions_EPromoId",
-                        column: x => x.EPromoId,
+                        name: "FK_PromoResults_Promotions_PromoId",
+                        column: x => x.PromoId,
                         principalTable: "Promotions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Participants_EPromoId",
+                name: "IX_Participants_PromoId",
                 table: "Participants",
-                column: "EPromoId");
+                column: "PromoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Prizes_EPromoId",
+                name: "IX_Prizes_PromoId",
                 table: "Prizes",
-                column: "EPromoId");
+                column: "PromoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PromoResults_EPrizeId",
+                name: "IX_PromoResults_PrizeId",
                 table: "PromoResults",
-                column: "EPrizeId");
+                column: "PrizeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PromoResults_EPromoId",
+                name: "IX_PromoResults_PromoId",
                 table: "PromoResults",
-                column: "EPromoId");
+                column: "PromoId");
         }
 
         /// <inheritdoc />

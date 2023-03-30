@@ -9,41 +9,40 @@ namespace RestFullAppTemplate.Data.Repositories
 {
     public class PromotionsRepository : BaseSqlRepository, IPromotionsRepository
     {
+        public PromotionsRepository(ApplicationDbContext db) : base(db)
+        {
+        }
+
         public async Task<Promo> Create(Promo promo)
         {
-            await using var db = DB;
-            var result = await db.Promotions.AddAsync(promo.Adapt<EPromo>());
-            await db.SaveChangesAsync();
+            var result = await Db.Promotions.AddAsync(promo.Adapt<EPromo>());
+            await Db.SaveChangesAsync();
             return result.Entity.Adapt<Promo>();
         }
 
         public async Task<Promo?> Get(int promoId)
         {
-            await using var db = DB;
-            var result = await db.Promotions.Where(x => x.Id == promoId).FirstOrDefaultAsync();
+            var result = await Db.Promotions.Where(x => x.Id == promoId).FirstOrDefaultAsync();
             return result?.Adapt<Promo>();
         }
 
         public async Task<bool> Delete(int promoId)
         {
-            await using var db = DB;
-            var rowCount = await db.Promotions.Where(x => x.Id == promoId).ExecuteDeleteAsync();
-            await db.SaveChangesAsync();
+            var rowCount = await Db.Promotions.Where(x => x.Id == promoId).ExecuteDeleteAsync();
+            await Db.SaveChangesAsync();
             return rowCount > 0;
         }
 
         public async Task<bool> Update(Promo promo)
         {
-            await using var db = DB;
-            return await db.Promotions.Where(c => c.Id == promo.Id).ExecuteUpdateAsync(c => c
+            return await Db.Promotions.Where(c => c.Id == promo.Id).ExecuteUpdateAsync(c => c
                 .SetProperty(p => p.Name, promo.Name)
                 .SetProperty(p => p.Description, promo.Description)) > 0;
         }
 
         public async Task<IReadOnlyList<Promo>> GetAll()
         {
-            await using var db = DB;
-            var result = db.Promotions.ToListAsync();
+            var result = await Db.Promotions.ToListAsync();
             return result.Adapt<IReadOnlyList<Promo>>();
         }
 
@@ -51,21 +50,19 @@ namespace RestFullAppTemplate.Data.Repositories
         {
             if (results == null || results.Count < 1)
                 return;
-            await using var db = DB;
             var adaptResults = results.Adapt<IReadOnlyList<EPromoResult>>();
             foreach (var res in adaptResults)
             {
                 res.EPromoId = promoId;
             }
 
-            await db.PromoResults.AddRangeAsync(adaptResults);
-            await db.SaveChangesAsync();
+            await Db.PromoResults.AddRangeAsync(adaptResults);
+            await Db.SaveChangesAsync();
         }
 
         public async Task<IReadOnlyList<PromoResult>> GetResults(int promoId)
         {
-            await using var db = DB;
-            var result = db.PromoResults.Where(res => res.EPromoId == promoId).ToListAsync();
+            var result = await Db.PromoResults.Where(res => res.EPromoId == promoId).ToListAsync();
             return result.Adapt<IReadOnlyList<PromoResult>>();
         }
     }

@@ -31,7 +31,7 @@ namespace RestFullAppTemplate.Web.Controllers
                 return BadRequest(promotionDto);
             }
             var promotion = await _promotionsService.Create(promotionDto.Name, promotionDto.Description);
-            return CreatedAtRoute("GetPromo", new { id = promotion.Id });
+            return CreatedAtAction(nameof(GetPromo), new { id = promotion.Id }, new {promotion.Id});
         }
 
         [HttpGet("{id:int}")]
